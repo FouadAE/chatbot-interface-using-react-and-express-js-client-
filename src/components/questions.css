@@ -1,0 +1,81 @@
+.my-container {
+  margin: 5%;
+}
+
+button:hover {
+  background-color: #005fa3;
+}
+.btn-primary {
+  width: 30%;
+}
+.chat-container {
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 10px;
+  height: 500px;
+  overflow-y: auto;
+}
+
+.message-thread {
+  display: flex;
+  flex-direction: column;
+}
+
+.message {
+  border-radius: 20px;
+  padding: 10px;
+  margin: 5px;
+  max-width: 70%;
+  word-wrap: break-word;
+  font-size: 1.2rem;
+}
+
+.user {
+  align-self: flex-end;
+  background-color: #2ecc71;
+  color: #fff;
+}
+
+.bot {
+  align-self: flex-start;
+  background-color: #34495e;
+  color: #fff;
+}
+
+.input-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.form-control {
+  width: 80%;
+  margin-right: 10px;
+}
+
+.btn-primary {
+  width: 20%;
+}
+.input-group {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 10px;
+  background-color: #f9f9f9;
+}
+
+.options {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.options button {
+  margin-right: 5px;
+  margin-bottom: 5px;
+}
