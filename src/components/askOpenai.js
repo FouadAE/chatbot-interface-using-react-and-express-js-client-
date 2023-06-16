@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "./questions.css";
+import "./openai.css";
 import axios from "axios";
 import { Spinner } from "react-bootstrap";
 
@@ -19,13 +19,11 @@ export default function AskOpenai() {
     fetch("/question/all")
       .then((res) => res.json())
       .then((data) => {
-        //console.log(data);
         setQuestions(data.questions);
       });
   }, []);
 
   const handleClick = async (index, item) => {
-    console.log("request send");
     setLoadingIndex(index);
     setIsLoading(true);
     setListQuestions({ isLoading: true });
@@ -122,71 +120,59 @@ export default function AskOpenai() {
         <div>
           <h3>{selectedQuestion}</h3>
 
-          <div className="row mt-2">
-            <div className="col-md-4"></div>
-            <div className="col-md-4">
-              <button className="btn btn-primary m-2" onClick={handleReset}>
-                Back
-              </button>
-            </div>
-          </div>
-          <div className="row">
-            {listQuestions.map((item, index) => (
-              <div key={index} className="col-md-4">
-                <div className="card m-2">
-                  <div className="card-body">
-                    <p className="card-text">{item}</p>
+          <div className="form-container">
+            <form onSubmit={handleSubmit}>
+              <div className="form-group">
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Enter Tag"
+                  onChange={(e) => setTag(e.target.value)}
+                />
+              </div>
+              <div className="form-group">
+                <textarea
+                  type="text"
+                  className="form-control"
+                  placeholder="Enter Response"
+                  onChange={(e) => setResponse(e.target.value)}
+                />
+              </div>
+              <div className="form-group">
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Enter Context Set"
+                  onChange={(e) => setContext_set(e.target.value)}
+                />
+              </div>
+              <div className="question-list">
+                {listQuestions.map((item, index) => (
+                  <div key={index} className="question-brick">
+                    <div className="question-text">{item}</div>
                     <button
-                      className="btn btn-danger"
+                      className="delete-button"
                       onClick={() => handleDelete(index)}
                     >
                       X
                     </button>
                   </div>
-                </div>
+                ))}
               </div>
-            ))}
-            <div className="row">
-              <div className="col-md-3"></div>
-              <div className="col-md-8">
-                <form onSubmit={handleSubmit}>
-                  <div className="form-group m-2">
-                    <input
-                      type="text"
-                      className="form-control"
-                      placeholder="Enter Tag"
-                      onChange={(e) => setTag(e.target.value)}
-                    />
-                  </div>
-                  <div className="form-group m-2">
-                    <textarea
-                      type="text"
-                      className="form-control"
-                      placeholder="Enter Response"
-                      onChange={(e) => setResponse(e.target.value)}
-                    />
-                  </div>
-                  <div className="form-group m-2">
-                    <input
-                      type="text"
-                      className="form-control"
-                      placeholder="Enter Context Set"
-                      onChange={(e) => setContext_set(e.target.value)}
-                    />
-                  </div>
+              <button type="submit" className="btn btn-primary">
+                Submit
+              </button>
+            </form>
+          </div>
 
-                  <button type="submit" className="btn btn-primary">
-                    Submit
-                  </button>
-                </form>
-              </div>
-            </div>
+          <div className="row mt-2">
+            <div className="col-md-4"></div>
           </div>
         </div>
       )}
       {isSaved && (
-        <div className="alert alert-success" role="alert">
-          <h3>Question Saved</h3>
+        <div className="alert alert-success mt-4" role="alert">
+          <h3>Tag Added</h3>
         </div>
       )}
     </div>

@@ -1,7 +1,7 @@
 import React from "react";
-import { useEffect } from "react";
 import axios from "axios";
 import "./questions.css";
+import { useEffect, useRef } from "react";
 
 function Message({ text, isUser }) {
   const className = isUser ? "message user" : "message bot";
@@ -15,8 +15,8 @@ export default function AskChatbot() {
   const [options, setOptions] = React.useState([]);
   const [question, setQuestion] = React.useState("");
   const [context, setContext] = React.useState("");
-
-  useEffect(() => {}, []);
+  const [showChat, setShowChat] = React.useState(false);
+  const messageThreadRef = useRef(null);
 
   const handleClick = (e, question) => {
     e.preventDefault();
@@ -74,48 +74,76 @@ export default function AskChatbot() {
       .catch((e) => console.log(JSON.stringify(e.response.data)));
   };
 
+  const toggleChat = () => {
+    setShowChat(!showChat);
+  };
+  useEffect(() => {
+    // Scroll to the last message
+    if (messageThreadRef.current) {
+      messageThreadRef.current.scrollTop =
+        messageThreadRef.current.scrollHeight;
+    }
+  }, [messages]);
+
   return (
-    <div className="chat-container border">
-      <div className="chat-header">
-        <h2>Chat with our bot</h2>
-      </div>
-      <div className="message-thread">
-        {messages.map((message, index) => (
-          <Message key={index} text={message.text} isUser={message.isUser} />
-        ))}
-      </div>
-      <div className="chat-input-container">
-        <form>
-          <div className="input-group">
-            <input
-              value={question}
-              name="question"
-              className="form-control"
-              placeholder="Type your message here"
-              onChange={(e) => setQuestion(e.target.value)}
-            ></input>
-            <button
-              className="btn btn-primary"
-              onClick={(e) => handleClick(e, question)}
-            >
-              send
+    <div>
+      {showChat ? (
+        <div className="chat-container border">
+          <div className="chat-header">
+            <div className="chat-title">
+              <span>Jamea Elfna Assistance</span>
+            </div>
+            <button className="close-button" onClick={toggleChat}>
+              X
             </button>
           </div>
-        </form>
-        {options && (
-          <div className="options">
-            {options.map((option, index) => (
-              <button
+          <div className="message-thread" ref={messageThreadRef}>
+            {messages.map((message, index) => (
+              <Message
                 key={index}
-                className="btn btn-success"
-                onClick={(e) => sendOptions(e, option)}
-              >
-                {option}
-              </button>
+                text={message.text}
+                isUser={message.isUser}
+              />
             ))}
+            {options && (
+              <div className="options">
+                {options.map((option, index) => (
+                  <button
+                    key={index}
+                    className="btn btn-success"
+                    onClick={(e) => sendOptions(e, option)}
+                  >
+                    {option}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
-        )}
-      </div>
+          <div className="chat-input-container">
+            <form>
+              <div className="input-group">
+                <input
+                  value={question}
+                  name="question"
+                  className="form-control"
+                  placeholder="Type your message here"
+                  onChange={(e) => setQuestion(e.target.value)}
+                ></input>
+                <button
+                  className="btn btn-primary"
+                  onClick={(e) => handleClick(e, question)}
+                >
+                  send
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      ) : (
+        <button className="chat-button" onClick={toggleChat}>
+          <img src="chatbot.png" alt="Chatbot Icon" className="chat-icon" />
+        </button>
+      )}
     </div>
   );
 }
